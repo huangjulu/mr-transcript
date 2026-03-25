@@ -4,6 +4,9 @@ node_modules/
 # Build output
 *.zip
 
+# Video files
+*.mp4
+
 # Python scripts (dev tools)
 *.py
 dancing_pencil_*.png
