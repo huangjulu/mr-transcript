@@ -1,0 +1,109 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    font-family: 'DM Sans', system-ui, sans-serif;
+  }
+
+  ::selection {
+    background: #FFD32C;
+    color: #191A23;
+  }
+
+  /* Custom scrollbar — bar only, no arrows */
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+    margin: 6px 0;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #FFD32C;
+    border-radius: 9999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #E6BC20;
+  }
+  ::-webkit-scrollbar-button {
+    display: none;
+  }
+}
+
+@layer components {
+  /* --- Grass-style hard shadow --- */
+  .shadow-hard {
+    box-shadow: 0px 4px 0px 0px #191A23;
+  }
+  .shadow-hard-sm {
+    box-shadow: 0px 3px 0px 0px #191A23;
+  }
+
+  /* --- Select --- */
+  .grass-select {
+    @apply rounded-xl border-2 border-gray-200 bg-white px-3 py-2.5 text-sm font-semibold;
+    @apply focus:outline-none focus:border-[#FFD32C] transition cursor-pointer;
+    color: #495057;
+    appearance: auto;
+  }
+
+  /* --- Input --- */
+  .grass-input {
+    @apply rounded-xl border-2 border-gray-200 bg-white px-3 py-2.5 text-sm font-mono font-semibold tracking-wide;
+    @apply focus:outline-none focus:border-[#FFD32C] transition;
+    color: #495057;
+  }
+  .grass-input::placeholder {
+    @apply text-gray-300 font-mono font-normal tracking-normal;
+  }
+
+  /* --- Primary Button (Grass green) --- */
+  .grass-btn-primary {
+    @apply inline-flex items-center justify-center px-5 py-2 rounded-full;
+    @apply bg-[#FFD32C] text-black font-bold uppercase tracking-wider;
+    @apply hover:shadow-hard-sm hover:-translate-y-0.5 active:translate-y-0 active:shadow-none;
+    @apply transition-all duration-150 cursor-pointer;
+  }
+
+  /* --- Outline Button --- */
+  .grass-btn-outline {
+    @apply inline-flex items-center justify-center px-5 py-2 rounded-full;
+    @apply bg-white text-black font-bold uppercase tracking-wider border-2 border-gray-200;
+    @apply hover:border-[#FFD32C] hover:shadow-hard-sm hover:-translate-y-0.5;
+    @apply active:translate-y-0 active:shadow-none;
+    @apply transition-all duration-150 cursor-pointer;
+  }
+
+  /* --- Danger Button --- */
+  .grass-btn-danger {
+    @apply inline-flex items-center justify-center px-5 py-2 rounded-full;
+    @apply bg-white text-red-500 font-bold uppercase tracking-wider border-2 border-red-200;
+    @apply hover:bg-red-50 hover:border-red-300;
+    @apply transition-all duration-150 cursor-pointer;
+  }
+
+  /* --- Icon Button --- */
+  .grass-btn-icon {
+    @apply flex-shrink-0 p-2.5 rounded-xl border-2 border-gray-200 bg-white;
+    @apply text-gray-400 hover:text-black hover:border-[#FFD32C] hover:shadow-hard-sm hover:-translate-y-0.5;
+    @apply active:translate-y-0 active:shadow-none;
+    @apply transition-all duration-150 cursor-pointer;
+  }
+}
+
+@layer utilities {
+  .font-dm {
+    font-family: 'DM Sans', system-ui, sans-serif;
+  }
+  .bg-lime {
+    background-color: #FFD32C;
+  }
+  .text-lime {
+    color: #FFD32C;
+  }
+  .border-lime {
+    border-color: #FFD32C;
+  }
+}

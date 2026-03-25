@@ -1,0 +1,20 @@
+{
+  "name": "sms-verify-ext",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build:css": "npx tailwindcss -i extension/popup/input.css -o extension/popup/popup.css --minify",
+    "watch:css": "npx tailwindcss -i extension/popup/input.css -o extension/popup/popup.css --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "tailwindcss": "^3.4.19"
+  },
+  "dependencies": {
+    "flag-icons": "^7.5.0"
+  }
+}

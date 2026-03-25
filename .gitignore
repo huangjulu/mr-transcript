@@ -1,0 +1,32 @@
+# Dependencies
+node_modules/
+
+# Build output
+*.zip
+
+# Python scripts (dev tools)
+*.py
+dancing_pencil_*.png
+pose_*.png
+base_pencil_*.png
+mr-transcript-dancing.png
+screenshot-source.png
+dancing_v2_*.png
+
+# Promo images (not part of extension)
+screenshot_*.png
+promo_*.png
+
+# Pixel editor (dev tool)
+pixel-editor.html
+
+# OS
+.DS_Store
+Thumbs.db
+bash.exe.stackdump
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
