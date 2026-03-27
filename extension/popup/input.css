@@ -8,7 +8,7 @@
   }
 
   ::selection {
-    background: #FFD32C;
+    background: theme('colors.primary');
     color: #191A23;
   }
 
@@ -21,7 +21,7 @@
     margin: 6px 0;
   }
   ::-webkit-scrollbar-thumb {
-    background: #FFD32C;
+    background: theme('colors.primary');
     border-radius: 9999px;
   }
   ::-webkit-scrollbar-thumb:hover {
@@ -44,7 +44,7 @@
   /* --- Select --- */
   .grass-select {
     @apply rounded-xl border-2 border-gray-200 bg-white px-3 py-2.5 text-sm font-semibold;
-    @apply focus:outline-none focus:border-[#FFD32C] transition cursor-pointer;
+    @apply focus:outline-none focus:border-primary transition cursor-pointer;
     color: #495057;
     appearance: auto;
   }
@@ -52,7 +52,7 @@
   /* --- Input --- */
   .grass-input {
     @apply rounded-xl border-2 border-gray-200 bg-white px-3 py-2.5 text-sm font-mono font-semibold tracking-wide;
-    @apply focus:outline-none focus:border-[#FFD32C] transition;
+    @apply focus:outline-none focus:border-primary transition;
     color: #495057;
   }
   .grass-input::placeholder {
@@ -62,7 +62,7 @@
   /* --- Primary Button (Grass green) --- */
   .grass-btn-primary {
     @apply inline-flex items-center justify-center px-5 py-2 rounded-full;
-    @apply bg-[#FFD32C] text-black font-bold uppercase tracking-wider;
+    @apply bg-primary text-black font-bold uppercase tracking-wider;
     @apply hover:shadow-hard-sm hover:-translate-y-0.5 active:translate-y-0 active:shadow-none;
     @apply transition-all duration-150 cursor-pointer;
   }
@@ -71,7 +71,7 @@
   .grass-btn-outline {
     @apply inline-flex items-center justify-center px-5 py-2 rounded-full;
     @apply bg-white text-black font-bold uppercase tracking-wider border-2 border-gray-200;
-    @apply hover:border-[#FFD32C] hover:shadow-hard-sm hover:-translate-y-0.5;
+    @apply hover:border-primary hover:shadow-hard-sm hover:-translate-y-0.5;
     @apply active:translate-y-0 active:shadow-none;
     @apply transition-all duration-150 cursor-pointer;
   }
@@ -87,7 +87,7 @@
   /* --- Icon Button --- */
   .grass-btn-icon {
     @apply flex-shrink-0 p-2.5 rounded-xl border-2 border-gray-200 bg-white;
-    @apply text-gray-400 hover:text-black hover:border-[#FFD32C] hover:shadow-hard-sm hover:-translate-y-0.5;
+    @apply text-gray-400 hover:text-black hover:border-primary hover:shadow-hard-sm hover:-translate-y-0.5;
     @apply active:translate-y-0 active:shadow-none;
     @apply transition-all duration-150 cursor-pointer;
   }
@@ -98,12 +98,12 @@
     font-family: 'DM Sans', system-ui, sans-serif;
   }
   .bg-lime {
-    background-color: #FFD32C;
+    background-color: theme('colors.primary');
   }
   .text-lime {
-    color: #FFD32C;
+    color: theme('colors.primary');
   }
   .border-lime {
-    border-color: #FFD32C;
+    border-color: theme('colors.primary');
   }
 }

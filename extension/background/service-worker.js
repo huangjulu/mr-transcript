@@ -9,14 +9,33 @@
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if (msg.type === 'FETCH_TRANSCRIPT') {
+    chrome.action.setBadgeText({ text: '✦' });
+    chrome.action.setBadgeBackgroundColor({ color: '#FFD32C' });
     handleFetchTranscript(msg)
-      .then((result) => sendResponse(result))
-      .catch((err) => sendResponse({ error: err.message }));
+      .then(({ transcript, filename }) => {
+        const blob = new Blob([transcript], { type: 'text/plain;charset=utf-8' });
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          chrome.downloads.download({
+            url: reader.result,
+            filename,
+            saveAs: false,
+          }, () => {
+            chrome.action.setBadgeText({ text: '' });
+            sendResponse({ ok: true });
+          });
+        };
+        reader.readAsDataURL(blob);
+      })
+      .catch((err) => {
+        chrome.action.setBadgeText({ text: '' });
+        sendResponse({ error: err.message });
+      });
     return true;
   }
 
   if (msg.type === 'LIST_LANGUAGES') {
-    handleListLanguages(msg.videoId)
+    handleListLanguages(msg.videoId, msg.tabId)
       .then((result) => sendResponse(result))
       .catch((err) => sendResponse({ error: err.message }));
     return true;
@@ -25,30 +44,51 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
 
 // ---------- Tab management ----------
 
-async function getOrCreateYouTubeTab(videoId) {
-  // Look for an existing YouTube tab
-  const tabs = await chrome.tabs.query({ url: 'https://www.youtube.com/*' });
+let _bgWindow = null; // { tabId, windowId, videoId }
 
-  if (tabs.length > 0) {
-    // Navigate the first YouTube tab to the target video if needed
-    const tab = tabs[0];
-    if (!tab.url.includes(videoId)) {
-      await chrome.tabs.update(tab.id, {
-        url: `https://www.youtube.com/watch?v=${videoId}`,
-      });
-      // Wait for page to load
-      await waitForTabLoad(tab.id);
-    }
-    return tab.id;
+async function getOrCreateYouTubeTab(videoId, activeTabId) {
+  // If the caller's active tab is already on this video, reuse it
+  if (activeTabId) {
+    try {
+      const tab = await chrome.tabs.get(activeTabId);
+      if (tab.url?.includes('youtube.com') && tab.url.includes(videoId)) {
+        return activeTabId;
+      }
+    } catch { /* tab gone */ }
   }
 
-  // Create a new tab (in background)
-  const tab = await chrome.tabs.create({
+  // Reuse existing background window if same video
+  if (_bgWindow) {
+    try {
+      await chrome.tabs.get(_bgWindow.tabId);
+      if (_bgWindow.videoId === videoId) return _bgWindow.tabId;
+      closeBgWindow();
+    } catch { _bgWindow = null; }
+  }
+
+  // Create a tiny unfocused window near top-right (closed immediately after use)
+  const win = await chrome.windows.create({
     url: `https://www.youtube.com/watch?v=${videoId}`,
-    active: false,
+    type: 'popup',
+    focused: false,
+    width: 1,
+    height: 1,
+    left: 2000,
+    top: 0,
   });
-  await waitForTabLoad(tab.id);
-  return tab.id;
+
+  const tabId = win.tabs[0].id;
+  await chrome.tabs.update(tabId, { muted: true });
+  _bgWindow = { tabId, windowId: win.id, videoId };
+  await waitForTabLoad(tabId);
+  return tabId;
+}
+
+function closeBgWindow() {
+  if (!_bgWindow) return;
+  const { windowId } = _bgWindow;
+  _bgWindow = null;
+  chrome.windows.remove(windowId).catch(() => {});
 }
 
 function waitForTabLoad(tabId) {
@@ -217,8 +257,8 @@ function getSmartError(meta) {
 
 // ---------- Main handlers ----------
 
-async function getCaptionData(videoId) {
-  const tabId = await getOrCreateYouTubeTab(videoId);
+async function getCaptionData(videoId, activeTabId) {
+  const tabId = await getOrCreateYouTubeTab(videoId, activeTabId);
 
   // Step 1: try to get tracks from page's existing data
   let result = await runInYouTubePage(tabId, pageGetCaptionTracks, [videoId]);
@@ -247,8 +287,16 @@ async function getCaptionData(videoId) {
   return { ...result, tabId, title: result.title || null };
 }
 
-async function handleListLanguages(videoId) {
-  const { tracks, translationLanguages } = await getCaptionData(videoId);
+
+async function handleListLanguages(videoId, activeTabId) {
+  let result;
+  try {
+    result = await getCaptionData(videoId, activeTabId);
+  } finally {
+    closeBgWindow();
+  }
+
+  const { tracks, translationLanguages, tabId } = result;
 
   const languages = tracks.map((t) => ({
     code: t.languageCode,
@@ -270,8 +318,15 @@ async function handleListLanguages(videoId) {
   return { languages };
 }
 
-async function handleFetchTranscript({ videoId, lang, format, timestamps }) {
-  const { tracks, translationLanguages, tabId, title } = await getCaptionData(videoId);
+async function handleFetchTranscript({ videoId, lang, format, timestamps, tabId: activeTabId }) {
+  let captionData;
+  try {
+    captionData = await getCaptionData(videoId, activeTabId);
+  } catch (err) {
+    closeBgWindow();
+    throw err;
+  }
+  const { tracks, translationLanguages, tabId, title } = captionData;
 
   let sourceTrack;
   let translationLang = null;
@@ -329,6 +384,7 @@ async function handleFetchTranscript({ videoId, lang, format, timestamps }) {
     filename = `${safeName}_${langCode}.txt`;
   }
 
+  closeBgWindow();
   return { transcript: output, filename };
 }
 

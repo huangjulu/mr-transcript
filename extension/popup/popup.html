@@ -10,14 +10,14 @@
   <link rel="stylesheet" href="popup.css">
   <link rel="stylesheet" href="../flag-icons.min.css">
 </head>
-<body class="w-[342px] bg-[#FAFAFA] text-black font-dm border border-[#FFD32C]">
+<body class="w-[342px] bg-[#FAFAFA] text-black font-dm border border-primary">
   <div id="app" class="p-4">
 
     <!-- Header -->
     <div class="flex items-center justify-between mb-5">
       <div class="flex items-center gap-2">
         <span class="text-lg font-extrabold tracking-tight">Mr. Transcript</span>
-        <span class="bg-lime px-2 py-0.5 rounded-full text-[10px] font-bold uppercase">v1.0</span>
+        <span class="bg-lime px-2 py-0.5 rounded-full text-[10px] font-bold uppercase">v1.0.1</span>
       </div>
       <img src="../icons/dancing48.png" alt="Mr. Transcript" class="w-[36px] h-[36px]" style="image-rendering: pixelated;">
     </div>
@@ -50,13 +50,13 @@
       <label class="block text-[11px] font-bold text-gray-400 uppercase tracking-wider mt-3 mb-1.5 select-none">Format</label>
       <div class="flex gap-2">
         <label class="format-label flex items-center gap-1.5 text-xs font-semibold cursor-pointer" style="color:#495057">
-          <input type="radio" name="format" value="txt" checked class="accent-[#FFD32C]"> TXT
+          <input type="radio" name="format" value="txt" checked class="accent-primary"> TXT
         </label>
         <label class="format-label flex items-center gap-1.5 text-xs font-semibold cursor-pointer" style="color:#495057">
-          <input type="radio" name="format" value="srt" class="accent-[#FFD32C]"> SRT
+          <input type="radio" name="format" value="srt" class="accent-primary"> SRT
         </label>
         <label class="format-label flex items-center gap-1.5 text-xs font-semibold cursor-pointer" style="color:#495057">
-          <input type="checkbox" id="chk-timestamps" class="accent-[#FFD32C]"> Timestamps
+          <input type="checkbox" id="chk-timestamps" class="accent-primary"> Timestamps
         </label>
       </div>
     </div>
@@ -66,7 +66,7 @@
 
     <!-- Status -->
     <div id="status-area" class="mt-3 flex items-center gap-2 hidden">
-      <div id="status-dot" class="w-2.5 h-2.5 rounded-full bg-lime animate-pulse"></div>
+      <div id="status-dot" class="w-3 h-3 border-2 border-gray-200 border-t-primary rounded-full animate-spin"></div>
       <span id="status-text" class="text-[11px] font-semibold text-gray-400">Fetching transcript...</span>
     </div>
 

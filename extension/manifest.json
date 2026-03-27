@@ -1,10 +1,11 @@
 {
   "manifest_version": 3,
   "name": "Mr. Transcript",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Paste a YouTube URL, pick a language, download the full transcript in one click.",
   "permissions": [
     "activeTab",
+    "downloads",
     "storage",
     "scripting",
     "tabs"
